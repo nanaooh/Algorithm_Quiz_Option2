@@ -18,26 +18,31 @@ Example:
 = 1). Total = 2 + 9 + 1 = 12
 
 **Approach Explanation:**
+DP– optimal structure– best total of all houses depends on the best totals of smaller groups of houses
+overlapping subproblems– the same smaller problems appear several times
 
+stores the results of these smaller problems and reuses them
+
+bottom-up dynamic programming: we start from the smallest cases (first house, first two) and build up using the max_money array
 
 **Time & Space Complexity:**
-Time Complexity: 
+Time Complexity: 0(n) – only goes through the list once; constant number per house
 
-
+Space Complexity: 0(n) – for the max_money, I used a list size of n to store the results for each house
 
 **Code w/ Comments:**
 def rob(nums):
-  n = len(nums)
-  if n == 0:
-    return 0
-  if n == 1:
-    return nums[0]
+    n = len(nums) –we find the number of houses
+    if n == 0: –no house, no rob
+        return 0
+    if n == 1: –1 house, rob 
+        return nums[0]
+  
+   max_money = [0] * n  –list of length n
+   max_money[0] = nums[0] –base case: first house available, best is to rob
+   max_money[1] = max(nums[0], nums[1]) –best case for 2 houses: only rob one, not two, so we take the larger amount
 
- max_money = [0] * n
- max_money[0] = nums[0]
- max_money[1] = max(nums[0], nums[1])
+   for i in range(2, n): –we determine from each house from 2 to n-1 the bests possible total up to that house
+   max_money[i] = max(max_money[i-1], max_money[i-2] + nums[i]) –recurrence; we either skip house i, and stay max, or rob house i, we can't rob i-1, so we add nums[i] to the  best total from 1-2.. it takes whichever gives a larger total
 
- for i in range(2, n):
-   max_money[i] = max(max_money[i-1], max_money[i-2] + nums[i])
-
-return max_money[-1]
+  return max_money[-1]
